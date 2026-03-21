@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../services/api";
 import { Header } from "../components/Header";
+import { Link } from "react-router-dom";
 
 import torcida from "../assets/torcida.jpg";
 import noticiaImg from "../assets/noticias.jpg";
@@ -20,7 +21,6 @@ export function Home() {
     api
       .get("/news")
       .then((response) => {
-        // sua API retorna { page, totalPages, totalItems, data: [...] }
         setNews(response.data.data);
       })
       .catch((error) => {
@@ -40,52 +40,62 @@ export function Home() {
         <Header />
 
         <main className="max-w-6xl mx-auto p-6 text-white">
-          {/* TESTE: imagem direta para verificar se o navegador renderiza */}
-          <img
-            src="https://picsum.photos/800/400"
-            style={{ width: "400px", marginBottom: "20px" }}
-            alt="teste"
-          />
-
           <h1 className="text-4xl font-bold mb-8">Últimas notícias</h1>
 
           {/* NOTÍCIA PRINCIPAL */}
           {mainNews && (
-            <div className="bg-white text-black rounded-xl overflow-hidden mb-10 shadow-xl">
-              <img
-                src={mainNews.image_url || noticiaImg}
-                alt={mainNews.title}
-                className="w-full h-64 object-cover"
-              />
+            <Link to={`/news/${mainNews.id}`}>
+              <div className="bg-white text-black rounded-xl overflow-hidden mb-10 shadow-xl hover:scale-[1.01] transition cursor-pointer">
 
-              <div className="p-8">
-                <h2 className="text-3xl font-bold mb-4">{mainNews.title}</h2>
+                <img
+                  src={mainNews.image_url || noticiaImg}
+                  alt={mainNews.title}
+                  className="w-full h-72 object-cover"
+                />
 
-                <p className="text-lg text-gray-700">{mainNews.content}</p>
+                <div className="p-8">
+                  <h2 className="text-3xl font-bold mb-4">
+                    {mainNews.title}
+                  </h2>
+
+                  <p className="text-lg text-gray-700 line-clamp-3">
+                    {mainNews.content}
+                  </p>
+                </div>
+
               </div>
-            </div>
+            </Link>
           )}
 
           {/* OUTRAS NOTÍCIAS */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
             {otherNews.map((item) => (
-              <article
-                key={item.id}
-                className="bg-white text-black rounded-xl overflow-hidden shadow-lg"
-              >
-                <img
-                  src={item.image_url || noticiaImg}
-                  alt={item.title}
-                  className="w-full h-40 object-cover"
-                />
+              <Link key={item.id} to={`/news/${item.id}`}>
+                <article className="bg-white text-black rounded-xl overflow-hidden shadow-lg hover:scale-105 transition cursor-pointer">
 
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                  <img
+                    src={item.image_url || noticiaImg}
+                    alt={item.title}
+                    className="w-full h-40 object-cover"
+                  />
 
-                  <p className="text-gray-700">{item.content}</p>
-                </div>
-              </article>
+                  <div className="p-6">
+
+                    <h3 className="text-xl font-bold mb-2">
+                      {item.title}
+                    </h3>
+
+                    <p className="text-gray-700 line-clamp-3">
+                      {item.content}
+                    </p>
+
+                  </div>
+
+                </article>
+              </Link>
             ))}
+
           </div>
         </main>
       </div>
