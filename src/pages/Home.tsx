@@ -5,100 +5,57 @@ import { Link } from "react-router-dom";
 
 import torcida from "../assets/torcida.jpg";
 import noticiaImg from "../assets/noticias.jpg";
+import Navbar from "../components/Navbar";
 
-interface News {
-  id: number;
-  title: string;
-  content: string;
-  image_url?: string | null;
-  created_at?: string;
-}
 
-export function Home() {
-  const [news, setNews] = useState<News[]>([]);
+function Home() {
+  const [news, setNews] = useState([]);
+
+  const API = "http://localhost:3000/api/news";
 
   useEffect(() => {
-    api
-      .get("/news")
-      .then((response) => {
-        setNews(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar notícias:", error);
-      });
+    fetch(API)
+      .then((res) => res.json())
+      .then((data) => setNews(data.data));
   }, []);
 
-  const mainNews = news[0];
-  const otherNews = news.slice(1);
-
   return (
-    <div
-      className="min-h-screen bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${torcida})` }}
-    >
-      <div className="min-h-screen bg-black/80">
-        <Header />
+    <div className="bg-gray-100 min-h-screen">
 
-        <main className="max-w-6xl mx-auto p-6 text-white">
-          <h1 className="text-4xl font-bold mb-8">Últimas notícias</h1>
+      <Navbar />
 
-          {/* NOTÍCIA PRINCIPAL */}
-          {mainNews && (
-            <Link to={`/news/${mainNews.id}`}>
-              <div className="bg-white text-black rounded-xl overflow-hidden mb-10 shadow-xl hover:scale-[1.01] transition cursor-pointer">
+      <div className="max-w-6xl mx-auto p-6">
 
-                <img
-                  src={mainNews.image_url || noticiaImg}
-                  alt={mainNews.title}
-                  className="w-full h-72 object-cover"
-                />
+        {/* 🔥 destaque principal */}
+        {news[0] && (
+          <Link to={`/news/${news[0].id}`}>
+            <div className="mb-8 cursor-pointer">
+              <img src={news[0].image_url} className="w-full rounded" />
+              <h1 className="text-3xl font-bold mt-4">{news[0].title}</h1>
+            </div>
+          </Link>
+        )}
 
-                <div className="p-8">
-                  <h2 className="text-3xl font-bold mb-4">
-                    {mainNews.title}
-                  </h2>
+        {/* 📰 grid de notícias */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {news.slice(1).map((item: any) => (
+            <Link to={`/news/${item.id}`} key={item.id}>
+              <div className="bg-white rounded shadow hover:scale-105 transition">
 
-                  <p className="text-lg text-gray-700 line-clamp-3">
-                    {mainNews.content}
-                  </p>
+                <img src={item.image_url} className="rounded-t" />
+
+                <div className="p-3">
+                  <h2 className="font-bold">{item.title}</h2>
                 </div>
 
               </div>
             </Link>
-          )}
+          ))}
+        </div>
 
-          {/* OUTRAS NOTÍCIAS */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            {otherNews.map((item) => (
-              <Link key={item.id} to={`/news/${item.id}`}>
-                <article className="bg-white text-black rounded-xl overflow-hidden shadow-lg hover:scale-105 transition cursor-pointer">
-
-                  <img
-                    src={item.image_url || noticiaImg}
-                    alt={item.title}
-                    className="w-full h-40 object-cover"
-                  />
-
-                  <div className="p-6">
-
-                    <h3 className="text-xl font-bold mb-2">
-                      {item.title}
-                    </h3>
-
-                    <p className="text-gray-700 line-clamp-3">
-                      {item.content}
-                    </p>
-
-                  </div>
-
-                </article>
-              </Link>
-            ))}
-
-          </div>
-        </main>
       </div>
     </div>
   );
 }
+
+export default Home;
