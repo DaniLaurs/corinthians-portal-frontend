@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBar";
 
 interface Team {
   id: number;
@@ -64,15 +64,17 @@ function Classificacao() {
           <table className="w-full text-sm">
 
             <thead>
-              <tr className="border-b border-gray-700 text-gray-400">
-                <th>#</th>
-                <th>Time</th>
-                <th>Pts</th>
-                <th>J</th>
-                <th>V</th>
-                <th>E</th>
-                <th>D</th>
-                <th>SG</th>
+                <tr className={`
+                  border-b border-gray-800 hover:bg-gray-900
+                  transition-all duration-500
+                `}>
+               <th className="text-center">Pts</th>
+                <th className="text-center">Pts</th>
+                <th className="text-center">J</th>
+                <th className="text-center">V</th>
+                <th className="text-center">E</th>
+                <th className="text-center">D</th>
+                <th className="text-center">SG</th>
               </tr>
             </thead>
 
@@ -90,8 +92,8 @@ function Classificacao() {
                     className={`
                       border-b border-gray-800 hover:bg-gray-900 transition
 
-                      ${index < 4 ? "bg-green-900/40" : ""}
-                      ${index >= table.length - 4 ? "bg-red-900/40" : ""}
+                      ${index < 6 ? "bg-green-900/40" : ""}
+                      ${index >= table.length - 6 ? "bg-red-900/40" : ""}
                       ${team.team_name
                         .toLowerCase()
                         .includes("corinthians")
@@ -101,9 +103,18 @@ function Classificacao() {
                   >
                     {/* 🔢 POSIÇÃO + VARIAÇÃO */}
                     <td className="flex items-center gap-2">
-                      {getVariation(team, index)}
-                      {index + 1}
-                    </td>
+                     <span
+                      className={`
+                      text-lg
+                        ${getVariation(team, index) === "🔼" ? "animate-bounce text-green-400" : ""}
+                        ${getVariation(team, index) === "🔽" ? "animate-bounce text-red-400" : ""}
+                          `}
+                        >
+                        {getVariation(team, index)}
+                        </span>
+
+                        {index + 1}
+                      </td>
 
                     {/* 🛡️ TIME + ESCUDO */}
                     <td className="flex items-center gap-2 py-2">
@@ -115,13 +126,12 @@ function Classificacao() {
                       )}
                       {team.team_name}
                     </td>
-
-                    <td className="font-bold">{team.points}</td>
-                    <td>{team.played}</td>
-                    <td>{team.win}</td>
-                    <td>{team.draw}</td>
-                    <td>{team.lose}</td>
-                    <td>{team.goals_diff}</td>
+                    <td className="text-center font-bold">{team.points}</td>
+                    <td className="text-center">{team.played}</td>
+                    <td className="text-center">{team.win}</td>
+                    <td className="text-center">{team.draw}</td>
+                    <td className="text-center">{team.lose}</td>
+                    <td className="text-center">{team.goals_diff}</td>
                   </tr>
                 ))
               )}

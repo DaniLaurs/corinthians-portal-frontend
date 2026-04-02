@@ -117,6 +117,10 @@ function Navbar() {
                     Admin
                   </Link>
 
+                  <Link to="/perfil" className="block px-4 py-3 hover:bg-gray-100">
+                    Perfil
+                  </Link>
+
                   <button
                     onClick={() => {
                       localStorage.removeItem("token");

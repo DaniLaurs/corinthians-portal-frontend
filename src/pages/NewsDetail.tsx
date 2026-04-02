@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/NavBar";
+import { timeAgo } from "../utils/timeAgo";
 
 interface News {
   id: number;
@@ -23,6 +24,8 @@ function NewsDetail() {
   const [news, setNews] = useState<News | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
+
+  console.log("DATA:", news?.created_at);
 
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
@@ -61,18 +64,17 @@ function NewsDetail() {
 
   // 👍 se usuário curtiu
   const checkLike = async () => {
-    const token = localStorage.getItem("token");
+ const token = localStorage.getItem("token");
 
-    if (!token) return;
+    const res = await fetch("http://localhost:3000/api/likes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ news_id: id }),
+    });
 
-    const res = await fetch(
-      `http://localhost:3000/api/likes/user/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
 
     const data = await res.json();
     setLiked(data.liked);
@@ -123,6 +125,7 @@ function NewsDetail() {
   // 👍 curtir
   const handleLike = async () => {
     const token = localStorage.getItem("token");
+    console.log("TOKEN:", token);
 
     if (!token) {
       alert("Faça login para curtir");
@@ -166,12 +169,10 @@ function NewsDetail() {
           {news.title}
         </h1>
 
-        {/* 📅 DATA */}
-        {news.created_at && (
-          <p className="text-sm text-gray-500 mb-6">
-            {new Date(news.created_at).toLocaleString()}
-          </p>
-        )}
+            {/* 📅 DATA */}
+           {news.created_at && (
+          <p>{timeAgo(news.created_at)}</p>
+      )}
 
         {/* 🖼️ IMAGEM */}
         <img
@@ -253,10 +254,8 @@ function NewsDetail() {
                     </p>
 
                     <p className="text-xs text-gray-500">
-                      {c.created_at
-                        ? new Date(c.created_at).toLocaleString()
-                        : ""}
-                    </p>
+                     {c.created_at ? timeAgo(c.created_at) : ""}
+                   </p>
                   </div>
 
                 </div>

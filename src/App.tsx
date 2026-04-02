@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import NewsDetail from "./pages/NewsDetail";
 import Classificacao from "./pages/Classificacao";
 import Titulos from "./pages/Titulos";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
         <Route path="/classificacao" element={<Classificacao />} />
 
         <Route path="/titulos" element={<Titulos />} />
+
+        <Route path="/perfil" element={<Profile />} />
 
       </Routes>
     </BrowserRouter>
