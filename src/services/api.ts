@@ -16,14 +16,25 @@ export async function apiFetch(
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
+  // 🔥 tenta 2 vezes (resolve problema do Render dormindo)
+  for (let i = 0; i < 2; i++) {
+    try {
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        ...options,
+        headers,
+      });
 
-  if (!response.ok) {
-    throw new Error("Erro na requisição");
+      if (!response.ok) {
+        throw new Error("Erro na requisição");
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (i === 1) throw error;
+
+      // espera 2 segundos antes de tentar de novo
+      await new Promise((res) => setTimeout(res, 2000));
+    }
   }
-
-  return response.json();
 }
+
