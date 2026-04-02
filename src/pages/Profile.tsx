@@ -25,8 +25,8 @@ export default function Profile() {
 
     // 💬 comentários
     apiFetch(`/api/comments/user/${user.id}`)
-      .then((data) => {
-        if (Array.isArray(data)) {
+.then((data: any[]) => {       
+   if (Array.isArray(data)) {
           setComments(data);
         } else {
           setComments([]);
@@ -36,7 +36,7 @@ export default function Profile() {
 
     // ❤️ curtidas
     apiFetch(`/api/likes/user/${user.id}`)
-      .then((data) => {
+      .then((data: any[]) => {
         if (Array.isArray(data)) {
           setLikes(data);
         } else {
