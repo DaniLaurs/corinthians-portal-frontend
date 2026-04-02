@@ -16,15 +16,16 @@ export function NewsPage() {
   const { id } = useParams();
   const [news, setNews] = useState<News | null>(null);
 
-  useEffect(() => {
-    api.get(`/news/${id}`).then((response:any) => {
-      setNews(response.data);
-    });
-  }, [id]);
-
-  if (!news) {
-    return <p className="text-white p-10">Carregando...</p>;
-  }
+    useEffect(() => {
+      apiFetch(`/api/news/${id}`)
+        .then((response: any) => {
+          setNews(response);
+        })
+        .catch(() => setNews(null));
+      }, [id]);
+        if (!news) {
+          return <p className="text-white p-10">Carregando...</p>;
+        }
 
   return (
     <div
