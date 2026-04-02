@@ -54,15 +54,15 @@ export default function Profile() {
     <div className="bg-black min-h-screen text-white">
       <Navbar />
 
-      <div className="max-w-3xl mx-auto p-6">
+      <div className="max-w-3xl mx-auto p-4 sm:p-6">
         <h1 className="text-2xl font-bold mb-6">👤 Perfil</h1>
 
-        <div className="bg-gray-900 p-6 rounded-lg shadow">
-          <p className="text-lg">
+        <div className="bg-gray-900 p-4 sm:p-6 rounded-lg shadow">
+          <p className="text-base sm:text-lg break-words">
             <strong>Nome:</strong> {user.name}
           </p>
 
-          <p className="text-gray-400 mt-2">
+          <p className="text-gray-400 mt-2 text-sm sm:text-base break-words">
             <strong>Email:</strong> {user.email}
           </p>
         </div>
@@ -75,7 +75,7 @@ export default function Profile() {
           <p className="text-gray-400">Nenhum comentário</p>
         ) : (
           comments.map((c: any) => (
-            <div key={c.id} className="bg-gray-800 p-3 mt-2 rounded">
+            <div key={c.id} className="bg-gray-800 p-3 mt-2 rounded break-words">
               <p>{c.content}</p>
               <span className="text-xs text-gray-400">
                 {c.title || "Sem título"}
