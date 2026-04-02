@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { api } from "../services/api";
+import { apiFetch } from "../services/api";
 import { Header } from "../components/Header";
 import torcida from "../assets/torcida.jpg";
 
@@ -17,7 +17,7 @@ export function NewsPage() {
   const [news, setNews] = useState<News | null>(null);
 
   useEffect(() => {
-    api.get(`/news/${id}`).then((response) => {
+    api.get(`/news/${id}`).then((response:any) => {
       setNews(response.data);
     });
   }, [id]);
