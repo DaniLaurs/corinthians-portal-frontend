@@ -7,7 +7,7 @@ function Login() {
   const handleLogin = async (e: any) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:3000/api/auth/sign-in", {
+    const res = await fetch("https://corinthians-portal-backend.onrender.com/api/auth/sign-in", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

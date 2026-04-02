@@ -38,9 +38,9 @@ function Admin() {
   // 🆕 CLASSIFICAÇÃO
   const [standings, setStandings] = useState<Standing[]>([]);
 
-  const API = "http://localhost:3000/api/news";
-  const COMMENT_API = "http://localhost:3000/api/comments";
-  const STANDINGS_API = "http://localhost:3000/api/standings";
+  const API = "https://corinthians-portal-backend.onrender.com/api/news";
+  const COMMENT_API = "https://corinthians-portal-backend.onrender.com/api/comments";
+  const STANDINGS_API = "https://corinthians-portal-backend.onrender.com/api/standings";
 
   const getUserFromToken = () => {
     const token = localStorage.getItem("token");

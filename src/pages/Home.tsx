@@ -11,7 +11,7 @@ interface News {
 function Home() {
   const [news, setNews] = useState<News[]>([]);
 
-  const API = "http://localhost:3000/api/news";
+  const API = "https://corinthians-portal-backend.onrender.com/api/news";
 
   useEffect(() => {
     const loadNews = async () => {

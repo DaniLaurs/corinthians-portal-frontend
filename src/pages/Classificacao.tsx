@@ -17,7 +17,7 @@ interface Team {
 function Classificacao() {
   const [table, setTable] = useState<Team[]>([]);
 
-  const API = "http://localhost:3000/api/standings";
+  const API = "https://corinthians-portal-backend.onrender.com/api/standings";
 
   // 🔥 VARIAÇÃO (🔼 🔽)
   const getVariation = (team: Team, index: number) => {

@@ -132,7 +132,7 @@ function NewsDetail() {
       return;
     }
 
-    const res = await fetch("http://localhost:3000/api/likes", {
+    const res = await fetch("https://corinthians-portal-backend.onrender.com/api/likes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
