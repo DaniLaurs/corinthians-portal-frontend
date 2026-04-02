@@ -8,7 +8,7 @@ function Register() {
   const handleRegister = async (e: any) => {
     e.preventDefault();
 
-    await fetch("http://localhost:3000/api/auth/sign-up", {
+    await fetch("https://corinthians-portal-backend.onrender.com/api/auth/sign-up", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

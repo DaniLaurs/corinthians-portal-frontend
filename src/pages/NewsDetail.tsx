@@ -30,8 +30,8 @@ function NewsDetail() {
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
 
-  const API = "http://localhost:3000/api/news";
-  const COMMENT_API = "http://localhost:3000/api/comments";
+  const API = "https://corinthians-portal-backend.onrender.com/api/news";
+  const COMMENT_API = "https://corinthians-portal-backend.onrender.com/api/comments";
 
   // 📰 carregar notícia
   const loadNews = async () => {
@@ -57,7 +57,7 @@ function NewsDetail() {
 
   // 👍 total de likes
   const loadLikes = async () => {
-    const res = await fetch(`http://localhost:3000/api/likes/${id}`);
+    const res = await fetch(`https://corinthians-portal-backend.onrender.com/api/likes/${id}`);
     const data = await res.json();
     setLikes(data.total);
   };
@@ -66,7 +66,7 @@ function NewsDetail() {
   const checkLike = async () => {
  const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:3000/api/likes", {
+    const res = await fetch("https://corinthians-portal-backend.onrender.com/api/likes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
