@@ -8,6 +8,7 @@ import NewsDetail from "./pages/NewsDetail";
 import Classificacao from "./pages/Classificacao";
 import Titulos from "./pages/Titulos";
 import Profile from "./pages/Profile";
+import Matches from "./pages/matches"; // 🔥 IMPORT NOVO
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
         <Route path="/titulos" element={<Titulos />} />
 
         <Route path="/perfil" element={<Profile />} />
+
+        <Route path="/matches" element={<Matches />} /> {/* 👈 NOVA ROTA */}
 
       </Routes>
     </BrowserRouter>

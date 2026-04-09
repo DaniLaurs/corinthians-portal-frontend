@@ -59,6 +59,8 @@ function Navbar() {
           <Link to="/" className={linkStyle("/")}>Home</Link>
           <Link to="/classificacao" className={linkStyle("/classificacao")}>Classificação</Link>
           <Link to="/titulos" className={linkStyle("/titulos")}>Títulos</Link>
+          <Link to="/matches" className={linkStyle("/matches")}>Jogos</Link> {/* 🔥 NOVO */}
+
 
           {user && (
             <div className="flex items-center gap-2 ml-2 border-l border-gray-700 pl-4">

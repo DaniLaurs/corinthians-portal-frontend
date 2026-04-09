@@ -70,5 +70,7 @@ export default defineConfig([
     },
   },
 ])
-```
-https://corinthians-portal-frontend-5ou1.vercel.app/
+``
+
+projeto online:
+https://corinthians-portal-frontend-ce85.vercel.app/
