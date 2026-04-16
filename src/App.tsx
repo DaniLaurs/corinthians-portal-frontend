@@ -9,6 +9,7 @@ import Classificacao from "./pages/Classificacao";
 import Titulos from "./pages/Titulos";
 import Profile from "./pages/Profile";
 import Matches from "./pages/matches"; // 🔥 IMPORT NOVO
+import AdminClassificacao from "./pages/AdminClassificacao";
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
         <Route path="/perfil" element={<Profile />} />
 
         <Route path="/matches" element={<Matches />} /> {/* 👈 NOVA ROTA */}
+
+        <Route path="/admin/classificacao" element={<AdminClassificacao />} />
 
       </Routes>
     </BrowserRouter>
