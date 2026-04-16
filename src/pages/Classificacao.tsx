@@ -93,7 +93,7 @@ function Classificacao() {
                       border-b border-gray-800 hover:bg-gray-900 transition
 
                       ${index < 6 ? "bg-green-900/40" : ""}
-                      ${index >= table.length - 6 ? "bg-red-900/40" : ""}
+                      ${index >= table.length - 4 ? "bg-red-900/40" : ""}
                       ${team.team_name
                         .toLowerCase()
                         .includes("corinthians")

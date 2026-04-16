@@ -107,14 +107,18 @@ function Matches() {
             </div>
 
             <div className="text-right">
-              <p className="text-sm">
-                {new Date(match.match_date).toLocaleDateString()}
-              </p>
-              <p className="text-xs text-gray-400">
-                {match.competition}
-              </p>
-            </div>
-
+             <p className="text-sm">
+              {new Date(match.match_date).toLocaleDateString()} -{" "}
+              {new Date(match.match_date).toLocaleTimeString("pt-BR", {
+                timeZone: "America/Sao_Paulo",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+               </p>
+             <p className="text-xs text-gray-400">
+              {match.competition}
+            </p>
+          </div>
           </div>
         ))}
       </div>
