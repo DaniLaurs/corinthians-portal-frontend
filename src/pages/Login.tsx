@@ -1,50 +1,71 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+
   const handleLogin = async (e: any) => {
     e.preventDefault();
 
-    const res = await fetch("https://corinthians-portal-backend.onrender.com/api/auth/sign-in", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("https://corinthians-portal-backend.onrender.com/api/auth/sign-in", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      window.location.href = "/";
-    } else {
-      alert("Erro no login");
+      console.log("STATUS:", res.status);
+      console.log("DATA:", data);
+
+      if (!res.ok) {
+        alert(data.message || "Erro no login");
+        return;
+      }
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        console.log("TOKEN SALVO:", data.token);
+
+        navigate("/"); // 🔥 melhor que window.location
+      } else {
+        alert("Token não recebido");
+      }
+
+    } catch (error) {
+      console.log("ERRO:", error);
+      alert("Erro ao conectar com servidor");
     }
   };
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-black text-white">
-      <form onSubmit={handleLogin} className="bg-gray-900 p-6 rounded flex flex-col gap-4">
+      <form onSubmit={handleLogin} className="bg-gray-900 p-6 rounded flex flex-col gap-4 w-80">
 
-        <h2 className="text-xl font-bold">Login</h2>
+        <h2 className="text-xl font-bold text-center">Login</h2>
 
         <input
-          className="p-2 text-black"
+          className="p-2 text-black rounded"
           placeholder="Email"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
-          className="p-2 text-black"
+          className="p-2 text-black rounded"
           type="password"
           placeholder="Senha"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="bg-white text-black p-2 rounded">
+        <button className="bg-white text-black p-2 rounded font-bold hover:bg-gray-200 transition">
           Entrar
         </button>
 
