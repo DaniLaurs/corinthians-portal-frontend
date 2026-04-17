@@ -69,9 +69,9 @@ function Matches() {
 
   // 🔥 FUNÇÃO PRA FORMATAR DATA BR
   const formatDateBR = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("pt-BR");
-  };
-
+  const [year, month, day] = dateString.split("-");
+  return `${day}/${month}/${year}`;
+};
   return (
     <div className="min-h-screen bg-black text-white p-6">
 
