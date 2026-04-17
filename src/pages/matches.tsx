@@ -55,19 +55,22 @@ function Matches() {
 
   const now = new Date();
 
-  // ✅ CORRIGIDO
   const upcoming = matches.filter((m) => {
     const [date, time] = m.match_date.split("T");
     const matchDate = new Date(`${date}T${time}`);
     return matchDate > now;
   });
 
-  // ✅ CORRIGIDO
   const finished = matches.filter((m) => {
     const [date, time] = m.match_date.split("T");
     const matchDate = new Date(`${date}T${time}`);
     return matchDate <= now;
   });
+
+  // 🔥 FUNÇÃO PRA FORMATAR DATA BR
+  const formatDateBR = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("pt-BR");
+  };
 
   return (
     <div className="min-h-screen bg-black text-white p-6">
@@ -106,10 +109,10 @@ function Matches() {
                 <img src={getLogo(match.away_team)} className="w-10 h-10 object-contain" />
               </div>
 
-              {/* ✅ CORRIGIDO AQUI */}
+              {/* ✅ AQUI FOI CORRIGIDO */}
               <div className="text-right">
                 <p className="text-sm">
-                  {date} - {time?.slice(0, 5)}
+                  {formatDateBR(date)} - {time?.slice(0, 5)}
                 </p>
                 <p className="text-xs text-gray-400">
                   {match.competition}
@@ -147,9 +150,9 @@ function Matches() {
                 <img src={getLogo(match.away_team)} className="w-6 h-6 object-contain" />
               </div>
 
-              {/* ✅ CORRIGIDO AQUI */}
+              {/* ✅ AQUI TAMBÉM */}
               <span className="text-sm">
-                {date}
+                {formatDateBR(date)}
               </span>
 
             </div>
