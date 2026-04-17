@@ -26,7 +26,6 @@ function Matches() {
     loadData();
   }, []);
 
-  // 🔥 CARREGA TUDO
   const loadData = async () => {
     try {
       const [matchesRes, teamsRes] = await Promise.all([
@@ -46,41 +45,39 @@ function Matches() {
     }
   };
 
-  // 🛡️ PEGAR ESCUDO
   const getLogo = (teamName: string) => {
     const team = teams.find(
       (t) => t.name === teamName.toLowerCase()
     );
 
-    return team
-      ? team.logo_url
-      : "https://via.placeholder.com/40";
+    return team ? team.logo_url : "https://via.placeholder.com/40";
   };
 
   const now = new Date();
 
+  // ✅ CORRIGIDO
   const upcoming = matches.filter((m) => {
-    const date = new Date(m.match_date);
-    return !isNaN(date.getTime()) && date > now;
+    const [date, time] = m.match_date.split("T");
+    const matchDate = new Date(`${date}T${time}`);
+    return matchDate > now;
   });
 
+  // ✅ CORRIGIDO
   const finished = matches.filter((m) => {
-    const date = new Date(m.match_date);
-    return !isNaN(date.getTime()) && date <= now;
+    const [date, time] = m.match_date.split("T");
+    const matchDate = new Date(`${date}T${time}`);
+    return matchDate <= now;
   });
 
   return (
     <div className="min-h-screen bg-black text-white p-6">
 
-      {/* 🔥 LOADING */}
       {loading && <p className="text-gray-400">Carregando jogos...</p>}
 
-      {/* 🔥 TESTE VISUAL */}
       {!loading && matches.length === 0 && (
         <p className="text-gray-500">Nenhum jogo cadastrado</p>
       )}
 
-      {/* 🔥 PRÓXIMOS JOGOS */}
       <h1 className="text-3xl font-bold mb-6">Próximos Jogos</h1>
 
       {upcoming.length === 0 && !loading && (
@@ -88,42 +85,42 @@ function Matches() {
       )}
 
       <div className="grid gap-4">
-        {upcoming.map((match) => (
-          <div
-            key={match.id}
-            className="bg-gray-900 p-4 rounded flex items-center justify-between"
-          >
+        {upcoming.map((match) => {
+          const [date, time] = match.match_date.split("T");
 
-            <div className="flex items-center gap-4">
-              <img src={getLogo(match.home_team)} className="w-10 h-10 object-contain" />
-              <span className="capitalize">{match.home_team}</span>
+          return (
+            <div
+              key={match.id}
+              className="bg-gray-900 p-4 rounded flex items-center justify-between"
+            >
+
+              <div className="flex items-center gap-4">
+                <img src={getLogo(match.home_team)} className="w-10 h-10 object-contain" />
+                <span className="capitalize">{match.home_team}</span>
+              </div>
+
+              <span className="text-gray-400 font-bold">vs</span>
+
+              <div className="flex items-center gap-4">
+                <span className="capitalize">{match.away_team}</span>
+                <img src={getLogo(match.away_team)} className="w-10 h-10 object-contain" />
+              </div>
+
+              {/* ✅ CORRIGIDO AQUI */}
+              <div className="text-right">
+                <p className="text-sm">
+                  {date} - {time?.slice(0, 5)}
+                </p>
+                <p className="text-xs text-gray-400">
+                  {match.competition}
+                </p>
+              </div>
+
             </div>
-
-            <span className="text-gray-400 font-bold">vs</span>
-
-            <div className="flex items-center gap-4">
-              <span className="capitalize">{match.away_team}</span>
-              <img src={getLogo(match.away_team)} className="w-10 h-10 object-contain" />
-            </div>
-
-            <div className="text-right">
-             <p className="text-sm">
-              {new Date(match.match_date + "T00:00:00").toLocaleDateString()} -{" "}
-              {new Date(match.match_date + "T00:00:00").toLocaleTimeString("pt-BR", {
-                timeZone: "America/Sao_Paulo",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-               </p>
-             <p className="text-xs text-gray-400">
-              {match.competition}
-            </p>
-          </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* 🔥 FINALIZADOS */}
       <h2 className="text-2xl font-bold mt-10 mb-4">
         Jogos Finalizados
       </h2>
@@ -133,26 +130,31 @@ function Matches() {
       )}
 
       <div className="grid gap-3 opacity-70">
-        {finished.map((match) => (
-          <div
-            key={match.id}
-            className="bg-gray-800 p-3 rounded flex justify-between items-center"
-          >
+        {finished.map((match) => {
+          const [date] = match.match_date.split("T");
 
-            <div className="flex items-center gap-3">
-              <img src={getLogo(match.home_team)} className="w-6 h-6 object-contain" />
-              <span className="capitalize">
-                {match.home_team} vs {match.away_team}
+          return (
+            <div
+              key={match.id}
+              className="bg-gray-800 p-3 rounded flex justify-between items-center"
+            >
+
+              <div className="flex items-center gap-3">
+                <img src={getLogo(match.home_team)} className="w-6 h-6 object-contain" />
+                <span className="capitalize">
+                  {match.home_team} vs {match.away_team}
+                </span>
+                <img src={getLogo(match.away_team)} className="w-6 h-6 object-contain" />
+              </div>
+
+              {/* ✅ CORRIGIDO AQUI */}
+              <span className="text-sm">
+                {date}
               </span>
-              <img src={getLogo(match.away_team)} className="w-6 h-6 object-contain" />
+
             </div>
-
-            <span className="text-sm">
-              {new Date(match.match_date).toLocaleDateString()}
-            </span>
-
-          </div>
-        ))}
+          );
+        })}
       </div>
 
     </div>

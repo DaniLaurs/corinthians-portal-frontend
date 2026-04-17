@@ -16,14 +16,12 @@ interface Match {
 }
 
 function Admin() {
-  // NEWS
   const [news, setNews] = useState<News[]>([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
 
-  // MATCHES
   const [matches, setMatches] = useState<Match[]>([]);
   const [matchForm, setMatchForm] = useState({
     home_team: "",
@@ -36,26 +34,39 @@ function Admin() {
   const API = "https://corinthians-portal-backend.onrender.com/api/news";
   const MATCH_API = "https://corinthians-portal-backend.onrender.com/api/matches";
 
-  useEffect(() => {
-    loadNews();
-    loadMatches();
-  }, []);
-
-  // NEWS
   const loadNews = async () => {
-    const res = await fetch(API);
-    const data = await res.json();
-    setNews(Array.isArray(data) ? data : data.data || []);
+  const res = await fetch(API);
+  const data = await res.json();
+  setNews(Array.isArray(data) ? data : data.data || []);
+};
+
+const loadMatches = async () => {
+  const res = await fetch(MATCH_API);
+  const data = await res.json();
+  setMatches(Array.isArray(data) ? data : data.data || []);
+};
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const [newsRes, matchesRes] = await Promise.all([
+        fetch(API),
+        fetch(MATCH_API),
+      ]);
+
+      const newsData = await newsRes.json();
+      const matchesData = await matchesRes.json();
+
+      setNews(Array.isArray(newsData) ? newsData : newsData.data || []);
+      setMatches(Array.isArray(matchesData) ? matchesData : matchesData.data || []);
+    } catch (err) {
+      console.log("Erro ao carregar dados", err);
+    }
   };
 
-  // MATCHES
-  const loadMatches = async () => {
-    const res = await fetch(MATCH_API);
-    const data = await res.json();
-    setMatches(Array.isArray(data) ? data : data.data || []);
-  };
+  fetchData();
+}, []);
 
-  // CREATE / UPDATE NEWS
   const createNews = async (e: React.FormEvent) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
@@ -80,7 +91,6 @@ function Admin() {
     setContent("");
     setImage("");
     setEditingId(null);
-
     loadNews();
   };
 
@@ -97,7 +107,6 @@ function Admin() {
     loadNews();
   };
 
-  // CREATE / UPDATE MATCH
   const handleMatchSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
@@ -148,27 +157,9 @@ function Admin() {
 
         {/* NEWS */}
         <form onSubmit={createNews} className="flex flex-col gap-3 mb-8">
-          <input
-            className="p-2 rounded text-black"
-            placeholder="Título"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-
-          <input
-            className="p-2 rounded text-black"
-            placeholder="Imagem URL"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-          />
-
-          <textarea
-            className="p-2 rounded text-black"
-            placeholder="Conteúdo"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-
+          <input className="p-2 rounded text-black" placeholder="Título" value={title} onChange={(e) => setTitle(e.target.value)} />
+          <input className="p-2 rounded text-black" placeholder="Imagem URL" value={image} onChange={(e) => setImage(e.target.value)} />
+          <textarea className="p-2 rounded text-black" placeholder="Conteúdo" value={content} onChange={(e) => setContent(e.target.value)} />
           <button className="bg-white text-black py-2 rounded">
             {editingId ? "Atualizar" : "Criar"}
           </button>
@@ -181,23 +172,16 @@ function Admin() {
             <p>{item.content}</p>
 
             <div className="flex gap-2 mt-2">
-              {/* ✅ EDITAR NEWS CORRETO */}
-              <button
-                onClick={() => {
-                  setEditingId(item.id);
-                  setTitle(item.title);
-                  setContent(item.content);
-                  setImage(item.image_url);
-                }}
-                className="bg-yellow-500 px-2 py-1 rounded text-black"
-              >
+              <button onClick={() => {
+                setEditingId(item.id);
+                setTitle(item.title);
+                setContent(item.content);
+                setImage(item.image_url);
+              }} className="bg-yellow-500 px-2 py-1 rounded text-black">
                 Editar
               </button>
 
-              <button
-                onClick={() => deleteNews(item.id)}
-                className="bg-red-600 px-2 py-1 rounded"
-              >
+              <button onClick={() => deleteNews(item.id)} className="bg-red-600 px-2 py-1 rounded">
                 Excluir
               </button>
             </div>
@@ -208,40 +192,24 @@ function Admin() {
         <h2 className="mt-10 text-xl font-bold">Próximos Jogos</h2>
 
         <form onSubmit={handleMatchSubmit} className="flex flex-col gap-2 mt-3">
-          <input
-            placeholder="Time da casa"
-            className="p-2 text-black rounded"
+          <input placeholder="Time da casa" className="p-2 text-black rounded"
             value={matchForm.home_team}
-            onChange={(e) =>
-              setMatchForm({ ...matchForm, home_team: e.target.value })
-            }
+            onChange={(e) => setMatchForm({ ...matchForm, home_team: e.target.value })}
           />
 
-          <input
-            placeholder="Time visitante"
-            className="p-2 text-black rounded"
+          <input placeholder="Time visitante" className="p-2 text-black rounded"
             value={matchForm.away_team}
-            onChange={(e) =>
-              setMatchForm({ ...matchForm, away_team: e.target.value })
-            }
+            onChange={(e) => setMatchForm({ ...matchForm, away_team: e.target.value })}
           />
 
-          <input
-            type="datetime-local"
-            className="p-2 text-black rounded"
+          <input type="datetime-local" className="p-2 text-black rounded"
             value={matchForm.match_date}
-            onChange={(e) =>
-              setMatchForm({ ...matchForm, match_date: e.target.value })
-            }
+            onChange={(e) => setMatchForm({ ...matchForm, match_date: e.target.value })}
           />
 
-          <input
-            placeholder="Competição"
-            className="p-2 text-black rounded"
+          <input placeholder="Competição" className="p-2 text-black rounded"
             value={matchForm.competition}
-            onChange={(e) =>
-              setMatchForm({ ...matchForm, competition: e.target.value })
-            }
+            onChange={(e) => setMatchForm({ ...matchForm, competition: e.target.value })}
           />
 
           <button className="bg-white text-black py-2 rounded">
@@ -249,46 +217,41 @@ function Admin() {
           </button>
         </form>
 
-        {matches.map((match) => (
-          <div key={match.id} className="bg-gray-900 p-4 mt-3 rounded">
-            <h3>{match.home_team} vs {match.away_team}</h3>
-             <p>{match.competition}</p>
-             <p>
-                {new Date(match.match_date).toLocaleString("pt-BR", {
-                  timeZone: "America/Sao_Paulo",
-                  day: "2-digit",
-                  month: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
-                                        <div className="flex gap-2 mt-2">
-              {/* ✅ EDITAR MATCH CORRIGIDO */}
-              <button
-                onClick={() => {
-                  setEditingMatchId(match.id);
+        {matches.map((match) => {
+          const [date, time] = match.match_date.split("T");
 
-                  setMatchForm({
-                    home_team: match.home_team,
-                    away_team: match.away_team,
-                    competition: match.competition,
-                    match_date: match.match_date.slice(0, 16),
-                  });
-                }}
-                className="bg-yellow-500 px-2 py-1 rounded text-black"
-              >
-                Editar
-              </button>
+          return (
+            <div key={match.id} className="bg-gray-900 p-4 mt-3 rounded">
+              <h3>{match.home_team} vs {match.away_team}</h3>
+              <p>{match.competition}</p>
+              <p>{date} - {time?.slice(0, 5)}</p>
 
-              <button
-                onClick={() => deleteMatch(match.id)}
-                className="bg-red-600 px-2 py-1 rounded"
-              >
-                Excluir
-              </button>
+              <div className="flex gap-2 mt-2">
+                <button
+                  onClick={() => {
+                    setEditingMatchId(match.id);
+                    setMatchForm({
+                      home_team: match.home_team,
+                      away_team: match.away_team,
+                      competition: match.competition,
+                      match_date: match.match_date.slice(0, 16),
+                    });
+                  }}
+                  className="bg-yellow-500 px-2 py-1 rounded text-black"
+                >
+                  Editar
+                </button>
+
+                <button
+                  onClick={() => deleteMatch(match.id)}
+                  className="bg-red-600 px-2 py-1 rounded"
+                >
+                  Excluir
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
       </div>
     </div>
