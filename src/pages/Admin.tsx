@@ -107,35 +107,43 @@ useEffect(() => {
     loadNews();
   };
 
-  const handleMatchSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
+ const handleMatchSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  const token = localStorage.getItem("token");
 
-    const method = editingMatchId ? "PUT" : "POST";
-    const url = editingMatchId
-      ? `${MATCH_API}/${editingMatchId}`
-      : MATCH_API;
+  const method = editingMatchId ? "PUT" : "POST";
+  const url = editingMatchId
+    ? `${MATCH_API}/${editingMatchId}`
+    : MATCH_API;
 
-    await fetch(url, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(matchForm),
-    });
+  // 🔥 SEPARA AQUI
+  const [date, time] = matchForm.match_date.split("T");
 
-    setMatchForm({
-      home_team: "",
-      away_team: "",
-      match_date: "",
-      competition: "",
-    });
+  await fetch(url, {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      home_team: matchForm.home_team,
+      away_team: matchForm.away_team,
+      competition: matchForm.competition,
+      date,
+      time,
+    }),
+  });
 
-    setEditingMatchId(null);
-    loadMatches();
-  };
+  setMatchForm({
+    home_team: "",
+    away_team: "",
+    match_date: "",
+    competition: "",
+  });
 
+  setEditingMatchId(null);
+  loadMatches();
+};
   const deleteMatch = async (id: number) => {
     const token = localStorage.getItem("token");
 
