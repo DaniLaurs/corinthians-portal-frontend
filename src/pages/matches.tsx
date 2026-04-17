@@ -108,8 +108,8 @@ function Matches() {
 
             <div className="text-right">
              <p className="text-sm">
-              {new Date(match.match_date).toLocaleDateString()} -{" "}
-              {new Date(match.match_date).toLocaleTimeString("pt-BR", {
+              {new Date(match.match_date + "T00:00:00").toLocaleDateString()} -{" "}
+              {new Date(match.match_date + "T00:00:00").toLocaleTimeString("pt-BR", {
                 timeZone: "America/Sao_Paulo",
                 hour: "2-digit",
                 minute: "2-digit",
