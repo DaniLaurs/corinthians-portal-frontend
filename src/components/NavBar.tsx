@@ -91,7 +91,7 @@ function Navbar() {
                   <>
                     <Link to="/perfil" className="block px-4 py-2 hover:bg-gray-100">Perfil</Link>
                     <Link to="/admin" className="block px-4 py-2 hover:bg-gray-100">Admin</Link>
-            
+                    <Link to="/admin/classificacao" className="block px-4 py-2 hover:bg-gray-100">AdminClassificacao</Link>
                     <button
                       onClick={() => {
                         localStorage.removeItem("token");
@@ -128,6 +128,7 @@ function Navbar() {
             <>
               <Link to="/perfil" className="block py-2">Perfil</Link>
               <Link to="/admin" className="block py-2">Admin</Link>
+              <Link to="/admin/classificacao" className="block py-2">AdminClassificacao</Link>
               <button
                 onClick={() => {
                   localStorage.removeItem("token");
