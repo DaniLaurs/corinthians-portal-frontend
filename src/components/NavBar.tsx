@@ -59,8 +59,7 @@ function Navbar() {
           <Link to="/" className={linkStyle("/")}>Home</Link>
           <Link to="/classificacao" className={linkStyle("/classificacao")}>Classificação</Link>
           <Link to="/titulos" className={linkStyle("/titulos")}>Títulos</Link>
-          <Link to="/matches" className={linkStyle("/matches")}>Jogos</Link> {/* 🔥 NOVO */}
-
+          <Link to="/matches" className={linkStyle("/matches")}>Jogos</Link>
 
           {user && (
             <div className="flex items-center gap-2 ml-2 border-l border-gray-700 pl-4">
@@ -90,17 +89,19 @@ function Navbar() {
                 ) : (
                   <>
                     <Link to="/perfil" className="block px-4 py-2 hover:bg-gray-100">Perfil</Link>
-                    {user?.email === "sousal22@outlook.com" && (
-                      <Link to="/admin" className="block px-4 py-2 hover:bg-gray-100">
-                        Admin
-                      </Link>
-                    )}
 
                     {user?.email === "sousal22@outlook.com" && (
-                      <Link to="/adminclassificacao" className="block px-4 py-2 hover:bg-gray-100">
-                        AdminClassificacao
-                      </Link>
-                    )}                    <Link to="/admin/classificacao" className="block px-4 py-2 hover:bg-gray-100">AdminClassificacao</Link>
+                      <>
+                        <Link to="/admin" className="block px-4 py-2 hover:bg-gray-100">
+                          Admin
+                        </Link>
+
+                        <Link to="/admin/classificacao" className="block px-4 py-2 hover:bg-gray-100">
+                          AdminClassificacao
+                        </Link>
+                      </>
+                    )}
+
                     <button
                       onClick={() => {
                         localStorage.removeItem("token");
@@ -136,18 +137,17 @@ function Navbar() {
           ) : (
             <>
               <Link to="/perfil" className="block py-2">Perfil</Link>
-              {user?.email === "sousal22@outlook.com" && (
-              <Link to="/admin" className="block px-4 py-2 hover:bg-gray-100">
-                Admin
-              </Link>
-            )}
 
-            {user?.email === "sousal22@outlook.com" && (
-              <Link to="/adminclassificacao" className="block px-4 py-2 hover:bg-gray-100">
-                AdminClassificacao
-              </Link>
-            )}
-              <Link to="/admin/classificacao" className="block py-2">AdminClassificacao</Link>
+              {user?.email === "sousal22@outlook.com" && (
+                <>
+                  <Link to="/admin" className="block py-2">Admin</Link>
+
+                  <Link to="/admin/classificacao" className="block py-2">
+                    AdminClassificacao
+                  </Link>
+                </>
+              )}
+
               <button
                 onClick={() => {
                   localStorage.removeItem("token");
@@ -167,4 +167,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
