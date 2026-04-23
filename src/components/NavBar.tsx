@@ -18,9 +18,6 @@ function Navbar() {
 
   const user = getUser();
 
-console.log("TOKEN:", token);
-console.log("USER:", user);
-
   const getInitial = (name: string) => {
     return name?.charAt(0).toUpperCase();
   };
@@ -37,7 +34,7 @@ console.log("USER:", user);
       
       <div className="flex items-center justify-between">
 
-        {/* 🔥 LOGO */}
+        {/* LOGO */}
         <Link to="/" className="flex items-center gap-2">
           <img
             src="https://logodetimes.com/times/corinthians/logo-corinthians-256.png"
@@ -48,7 +45,7 @@ console.log("USER:", user);
           </h1>
         </Link>
 
-        {/* ☰ BOTÃO MOBILE */}
+        {/* BOTÃO MOBILE */}
         <button
           onClick={() => setOpen(!open)}
           className="sm:hidden bg-white text-black px-3 py-1 rounded"
@@ -56,7 +53,7 @@ console.log("USER:", user);
           ☰
         </button>
 
-        {/* MENU DESKTOP */}
+        {/* DESKTOP */}
         <div className="hidden sm:flex items-center gap-6">
 
           <Link to="/" className={linkStyle("/")}>Home</Link>
@@ -73,6 +70,7 @@ console.log("USER:", user);
             </div>
           )}
 
+          {/* DROPDOWN */}
           <div className="relative ml-2">
             <button
               onClick={() => setOpen(!open)}
@@ -88,7 +86,6 @@ console.log("USER:", user);
                   <>
                     <Link to="/login" className="block px-4 py-2 hover:bg-gray-100">Login</Link>
                     <Link to="/register" className="block px-4 py-2 hover:bg-gray-100">Cadastro</Link>
-                    <Link to="/matches">Jogos</Link>
                   </>
                 ) : (
                   <>
@@ -125,13 +122,14 @@ console.log("USER:", user);
         </div>
       </div>
 
-      {/* 📱 MENU MOBILE */}
+      {/* MOBILE */}
       {open && (
         <div className="sm:hidden mt-4 flex flex-col gap-2">
 
           <Link to="/" className={linkStyle("/")}>Home</Link>
           <Link to="/classificacao" className={linkStyle("/classificacao")}>Classificação</Link>
           <Link to="/titulos" className={linkStyle("/titulos")}>Títulos</Link>
+          <Link to="/matches" className={linkStyle("/matches")}>Jogos</Link> {/* ✅ CORRIGIDO */}
 
           {!token ? (
             <>
@@ -145,7 +143,6 @@ console.log("USER:", user);
               {user?.email === "sousal22@outlook.com" && (
                 <>
                   <Link to="/admin" className="block py-2">Admin</Link>
-
                   <Link to="/admin/classificacao" className="block py-2">
                     AdminClassificacao
                   </Link>
