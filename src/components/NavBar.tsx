@@ -18,6 +18,9 @@ function Navbar() {
 
   const user = getUser();
 
+console.log("TOKEN:", token);
+console.log("USER:", user);
+
   const getInitial = (name: string) => {
     return name?.charAt(0).toUpperCase();
   };
@@ -85,6 +88,7 @@ function Navbar() {
                   <>
                     <Link to="/login" className="block px-4 py-2 hover:bg-gray-100">Login</Link>
                     <Link to="/register" className="block px-4 py-2 hover:bg-gray-100">Cadastro</Link>
+                    <Link to="/matches">Jogos</Link>
                   </>
                 ) : (
                   <>
