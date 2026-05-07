@@ -11,7 +11,9 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://corinthians-portal-backend.onrender.com/api/auth/sign-in", {
+      console.log("📤 ENVIANDO LOGIN:", { email, password });
+
+      const res = await fetch("http://localhost:3000/api/auth/sign-in", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -19,27 +21,35 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
 
+      console.log("📡 RESPONSE:", res);
+
       const data = await res.json();
 
-      console.log("STATUS:", res.status);
-      console.log("DATA:", data);
+      console.log("📥 STATUS:", res.status);
+      console.log("📥 DATA:", data);
 
       if (!res.ok) {
+        console.log("❌ ERRO NO LOGIN:", data);
         alert(data.message || "Erro no login");
         return;
       }
 
       if (data.token) {
-        localStorage.setItem("token", data.token);
-        console.log("TOKEN SALVO:", data.token);
+        console.log("🎟️ TOKEN RECEBIDO:", data.token);
 
-        navigate("/"); // 🔥 melhor que window.location
+        localStorage.setItem("token", data.token);
+
+        const tokenSalvo = localStorage.getItem("token");
+        console.log("💾 TOKEN SALVO NO LOCALSTORAGE:", tokenSalvo);
+
+        navigate("/");
       } else {
+        console.log("❌ TOKEN NÃO VEIO NA RESPOSTA");
         alert("Token não recebido");
       }
 
     } catch (error) {
-      console.log("ERRO:", error);
+      console.log("🚨 ERRO FETCH:", error);
       alert("Erro ao conectar com servidor");
     }
   };

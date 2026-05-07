@@ -15,6 +15,9 @@ interface Match {
   competition: string;
 }
 
+const API = "https://corinthians-portal-backend.onrender.com/api/news";
+const MATCH_API = "https://corinthians-portal-backend.onrender.com/api/matches";
+
 function Admin() {
   const [news, setNews] = useState<News[]>([]);
   const [title, setTitle] = useState("");
@@ -31,8 +34,7 @@ function Admin() {
   });
   const [editingMatchId, setEditingMatchId] = useState<number | null>(null);
 
-  const API = "https://corinthians-portal-backend.onrender.com/api/news";
-  const MATCH_API = "https://corinthians-portal-backend.onrender.com/api/matches";
+
 
   const loadNews = async () => {
   const res = await fetch(API);
@@ -73,6 +75,8 @@ useEffect(() => {
 
     const method = editingId ? "PUT" : "POST";
     const url = editingId ? `${API}/${editingId}` : API;
+
+    console.log("TOKEN ENVIADO:", token);
 
     await fetch(url, {
       method,
