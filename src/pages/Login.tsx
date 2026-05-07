@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +14,7 @@ function Login() {
     try {
       console.log("📤 ENVIANDO LOGIN:", { email, password });
 
-      const res = await fetch("http://localhost:3000/api/auth/sign-in", {
+      const res = await fetch("https://corinthians-portal-backend.onrender.com", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
