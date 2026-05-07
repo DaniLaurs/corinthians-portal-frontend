@@ -90,13 +90,7 @@ function Matches() {
       setLoading(false);
     }
   };
-  const normalize = (name: string) => {
-  return name
-    .toLowerCase()
-    .normalize("NFD") // remove acento
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
-};
+ 
 
 const getLogo = (teamName: string): string => {
   const key = normalize(teamName);
