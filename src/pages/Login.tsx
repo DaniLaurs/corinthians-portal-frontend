@@ -14,7 +14,7 @@ function Login() {
     try {
       console.log("📤 ENVIANDO LOGIN:", { email, password });
 
-      const res = await fetch("https://corinthians-portal-backend.onrender.com", {
+      const res = await fetch("https://corinthians-portal-backend.onrender.com/api/auth/sign-in", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
