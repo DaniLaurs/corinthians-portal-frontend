@@ -13,6 +13,7 @@ interface Standing {
 
 function AdminClassificacao() {
   const [standings, setStandings] = useState<Standing[]>([]);
+
   const [form, setForm] = useState({
     team_name: "",
     points: 0,
@@ -25,21 +26,47 @@ function AdminClassificacao() {
 
   const [editingId, setEditingId] = useState<number | null>(null);
 
-  const API = "https://corinthians-portal-backend.onrender.com/api/standings";
+  const API =
+    "https://corinthians-portal-backend.onrender.com/api/standings";
 
-  useEffect(() => {
-    loadStandings();
-  }, []);
-
+  // 🔥 PRIMEIRO DECLARA A FUNÇÃO
   const loadStandings = async () => {
     try {
       const res = await fetch(API);
       const data = await res.json();
-      setStandings(Array.isArray(data) ? data : data.data || []);
-    } catch {
-      console.log("Erro ao carregar classificação");
+
+      // 🔥 ORDENA PELOS PONTOS
+      const sorted = (
+        Array.isArray(data) ? data : data.data || []
+      ).sort((a: Standing, b: Standing) => b.points - a.points);
+
+      setStandings(sorted);
+
+    } catch (error) {
+      console.log("Erro ao carregar classificação", error);
     }
   };
+
+  // 🔥 DEPOIS USA NO useEffect
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const res = await fetch(API);
+      const data = await res.json();
+
+      const sorted = (
+        Array.isArray(data) ? data : data.data || []
+      ).sort((a: Standing, b: Standing) => b.points - a.points);
+
+      setStandings(sorted);
+
+    } catch (error) {
+      console.log("Erro ao carregar classificação", error);
+    }
+  };
+
+  fetchData();
+}, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +74,10 @@ function AdminClassificacao() {
     const token = localStorage.getItem("token");
 
     const method = editingId ? "PUT" : "POST";
-    const url = editingId ? `${API}/${editingId}` : API;
+
+    const url = editingId
+      ? `${API}/${editingId}`
+      : API;
 
     const res = await fetch(url, {
       method,
@@ -74,6 +104,7 @@ function AdminClassificacao() {
     });
 
     setEditingId(null);
+
     loadStandings();
   };
 
@@ -99,14 +130,20 @@ function AdminClassificacao() {
         </h1>
 
         {/* FORM */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2 mb-6">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-2 mb-6"
+        >
 
           <input
             placeholder="Time"
             className="p-2 text-black rounded"
             value={form.team_name}
             onChange={(e) =>
-              setForm({ ...form, team_name: e.target.value })
+              setForm({
+                ...form,
+                team_name: e.target.value,
+              })
             }
           />
 
@@ -116,7 +153,10 @@ function AdminClassificacao() {
             className="p-2 text-black rounded"
             value={form.points}
             onChange={(e) =>
-              setForm({ ...form, points: Number(e.target.value) })
+              setForm({
+                ...form,
+                points: Number(e.target.value),
+              })
             }
           />
 
@@ -126,7 +166,10 @@ function AdminClassificacao() {
             className="p-2 text-black rounded"
             value={form.played}
             onChange={(e) =>
-              setForm({ ...form, played: Number(e.target.value) })
+              setForm({
+                ...form,
+                played: Number(e.target.value),
+              })
             }
           />
 
@@ -136,7 +179,10 @@ function AdminClassificacao() {
             className="p-2 text-black rounded"
             value={form.win}
             onChange={(e) =>
-              setForm({ ...form, win: Number(e.target.value) })
+              setForm({
+                ...form,
+                win: Number(e.target.value),
+              })
             }
           />
 
@@ -146,7 +192,10 @@ function AdminClassificacao() {
             className="p-2 text-black rounded"
             value={form.draw}
             onChange={(e) =>
-              setForm({ ...form, draw: Number(e.target.value) })
+              setForm({
+                ...form,
+                draw: Number(e.target.value),
+              })
             }
           />
 
@@ -156,7 +205,10 @@ function AdminClassificacao() {
             className="p-2 text-black rounded"
             value={form.lose}
             onChange={(e) =>
-              setForm({ ...form, lose: Number(e.target.value) })
+              setForm({
+                ...form,
+                lose: Number(e.target.value),
+              })
             }
           />
 
@@ -166,29 +218,52 @@ function AdminClassificacao() {
             className="p-2 text-black rounded"
             value={form.goals_diff}
             onChange={(e) =>
-              setForm({ ...form, goals_diff: Number(e.target.value) })
+              setForm({
+                ...form,
+                goals_diff: Number(e.target.value),
+              })
             }
           />
 
           <button className="bg-white text-black py-2 rounded">
             {editingId ? "Atualizar" : "Adicionar"}
           </button>
+
         </form>
 
         {/* LISTA */}
-        {standings.map((team) => (
-          <div key={team.id} className="bg-gray-900 p-4 mb-3 rounded">
+        {standings.map((team, index) => (
+          <div
+            key={team.id}
+            className="bg-gray-900 p-4 mb-3 rounded"
+          >
 
-            <h3 className="font-bold">{team.team_name}</h3>
+            <h3 className="font-bold">
+              #{index + 1} - {team.team_name}
+            </h3>
 
             <p>Pontos: {team.points}</p>
             <p>Jogos: {team.played}</p>
+            <p>Vitórias: {team.win}</p>
+            <p>Empates: {team.draw}</p>
+            <p>Derrotas: {team.lose}</p>
+            <p>Saldo: {team.goals_diff}</p>
 
             <div className="flex gap-2 mt-2">
+
               <button
                 onClick={() => {
                   setEditingId(team.id);
-                  setForm(team);
+
+                  setForm({
+                    team_name: team.team_name,
+                    points: team.points,
+                    played: team.played,
+                    win: team.win,
+                    draw: team.draw,
+                    lose: team.lose,
+                    goals_diff: team.goals_diff,
+                  });
                 }}
                 className="bg-yellow-500 px-2 py-1 rounded text-black"
               >
@@ -201,6 +276,7 @@ function AdminClassificacao() {
               >
                 Excluir
               </button>
+
             </div>
 
           </div>
