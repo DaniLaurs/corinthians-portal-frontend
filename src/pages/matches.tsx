@@ -18,7 +18,7 @@ const TEAM_LOGOS: Record<string, string> = {
   // Brasileiros
   corinthians:
     "https://logodetimes.com/times/corinthians/logo-corinthians-256.png",
-
+    
   flamengo:
     "https://logodetimes.com/times/flamengo/logo-flamengo-256.png",
 
@@ -170,32 +170,34 @@ function Matches() {
       setLoading(false);
     }
   };
+const getLogo = (teamName: string): string => {
+  const key = normalize(teamName);
 
-  const getLogo = (teamName: string): string => {
-    const key = normalize(teamName);
+  console.log("🔎 procurando:", key);
 
-    console.log("🔎 procurando:", key);
+  // 🔥 tenta pegar do TEAM_LOGOS primeiro
+  if (TEAM_LOGOS[key]) {
+    return TEAM_LOGOS[key];
+  }
 
-    // 🔥 procura no banco primeiro
-    const team = teams.find(
-      (t) => normalize(t.name) === key
-    );
+  // 🔥 depois tenta banco
+  const team = teams.find(
+    (t) => normalize(t.name) === key
+  );
 
-    console.log("📦 encontrado:", team);
+  console.log("📦 encontrado:", team);
 
-    if (team?.logo_url) {
-      return team.logo_url;
-    }
+  // 🔥 só usa se for URL válida
+  if (
+    team?.logo_url &&
+    team.logo_url.startsWith("http")
+  ) {
+    return team.logo_url;
+  }
 
-    // 🔥 fallback manual
-    if (TEAM_LOGOS[key]) {
-      return TEAM_LOGOS[key];
-    }
-
-    // 🔥 logo padrão
-    return "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
-  };
-
+  // 🔥 fallback
+  return "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
+};
   // 🔥 próximos jogos
   const upcoming = matches.filter((m) => {
     return m.match_date > new Date().toISOString();
