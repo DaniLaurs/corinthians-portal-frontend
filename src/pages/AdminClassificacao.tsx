@@ -8,6 +8,8 @@ interface Standing {
   win: number;
   draw: number;
   lose: number;
+  goals_for: number;       // 🔥 gols pró
+  goals_against: number;
   goals_diff: number;
 }
 
@@ -21,13 +23,15 @@ function AdminClassificacao() {
     win: 0,
     draw: 0,
     lose: 0,
+     goals_for: 0,      // 🔥 gols pró
+  goals_against: 0,
     goals_diff: 0,
   });
 
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const API =
-    "https://corinthians-portal-backend.onrender.com/api/standings";
+   "http://localhost:3000/api/standings";
 
   // 🔥 PRIMEIRO DECLARA A FUNÇÃO
   const loadStandings = async () => {
@@ -100,6 +104,8 @@ useEffect(() => {
       win: 0,
       draw: 0,
       lose: 0,
+      goals_for: 0,
+      goals_against: 0,
       goals_diff: 0,
     });
 
@@ -212,6 +218,32 @@ useEffect(() => {
             }
           />
 
+             <input
+            type="number"
+            placeholder="Gol pró"
+            className="p-2 text-black rounded"
+            value={form.goals_for}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                goals_for: Number(e.target.value),
+              })
+            }
+          />
+
+             <input
+            type="number"
+            placeholder="Gols contra "
+            className="p-2 text-black rounded"
+            value={form.goals_against}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                goals_against: Number(e.target.value),
+              })
+            }
+          />
+
           <input
             type="number"
             placeholder="Saldo de gols"
@@ -247,6 +279,8 @@ useEffect(() => {
             <p>Vitórias: {team.win}</p>
             <p>Empates: {team.draw}</p>
             <p>Derrotas: {team.lose}</p>
+            <p>Gols pró: {team.goals_for}</p>
+            <p>Gols contra: {team.goals_against}</p>
             <p>Saldo: {team.goals_diff}</p>
 
             <div className="flex gap-2 mt-2">
@@ -262,6 +296,8 @@ useEffect(() => {
                     win: team.win,
                     draw: team.draw,
                     lose: team.lose,
+                    goals_for: team.goals_for,
+                    goals_against: team.goals_against,
                     goals_diff: team.goals_diff,
                   });
                 }}

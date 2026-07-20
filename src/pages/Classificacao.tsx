@@ -10,8 +10,11 @@ interface Team {
   win: number;
   draw: number;
   lose: number;
-  goals_diff: number;
   last_position?: number;
+  goals_for: number;       // 🔥 gols pró
+  goals_against: number;   // 🔥 gols contra
+  goals_diff: number;
+
 }
 
 // 🔥 LOGOS MANUAIS
@@ -99,7 +102,7 @@ function Classificacao() {
   const [table, setTable] = useState<Team[]>([]);
 
   const API =
-    "https://corinthians-portal-backend.onrender.com/api/standings";
+"http://localhost:3000/api/standings";
 
   // 🔥 VARIAÇÃO POSIÇÃO
   const getVariation = (team: Team, index: number) => {
@@ -120,22 +123,27 @@ function Classificacao() {
 
         const data = await res.json();
 
-        // 🔥 ORDENAÇÃO
-        const sorted = data.sort((a: Team, b: Team) => {
-          if (b.points !== a.points) {
-            return b.points - a.points;
-          }
+              // 🔥 ORDENAÇÃO
+            const sorted = data.sort((a: Team, b: Team) => {
+        if (b.points !== a.points) {
+          return b.points - a.points;
+        }
 
-          if (b.win !== a.win) {
-            return b.win - a.win;
-          }
+        if (b.win !== a.win) {
+          return b.win - a.win;
+        }
 
-          if (a.lose !== b.lose) {
-            return a.lose - b.lose;
-          }
-
+        if (b.goals_diff !== a.goals_diff) {
           return b.goals_diff - a.goals_diff;
-        });
+        }
+
+        if (b.goals_for !== a.goals_for) {
+          return b.goals_for - a.goals_for;
+        }
+
+        return a.goals_against - b.goals_against;
+      });
+            
 
         setTable(sorted);
       } catch {
@@ -172,7 +180,10 @@ function Classificacao() {
                 <th className="text-center">V</th>
                 <th className="text-center">E</th>
                 <th className="text-center">D</th>
+                <th className="text-center">GP</th>
+                <th className="text-center">GC</th>
                 <th className="text-center">SG</th>
+                
               </tr>
             </thead>
 
@@ -271,9 +282,19 @@ function Classificacao() {
                     </td>
 
                     <td className="text-center">
+                      {team.goals_for}
+                    </td>
+
+                    <td className="text-center">
+                      {team.goals_against}
+                    </td>
+
+                    
+                    <td className="text-center">
                       {team.goals_diff}
                     </td>
-                  </tr>
+                    
+                   </tr>
                 ))
               )}
             </tbody>

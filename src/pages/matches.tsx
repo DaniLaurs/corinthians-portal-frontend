@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Calendar, Clock3 } from "lucide-react";
 
 interface Match {
   id: number;
@@ -134,10 +135,24 @@ function Matches() {
   const [loading, setLoading] = useState(true);
 
   const API =
-    "https://corinthians-portal-backend.onrender.com/api/matches";
+    "http://localhost:3000/api/matches";
 
   const TEAM_API =
-    "https://corinthians-portal-backend.onrender.com/api/teams";
+    "http://localhost:3000/api/teams";
+
+    const daysLeft = (date: string) => {
+  const diff =
+    new Date(date).getTime() - Date.now();
+
+  const days = Math.ceil(
+    diff / (1000 * 60 * 60 * 24)
+  );
+
+  if (days === 0) return "Hoje";
+  if (days === 1) return "Amanhã";
+
+  return `Faltam ${days} dias`;
+};
 
   useEffect(() => {
     loadData();
@@ -224,7 +239,7 @@ const getLogo = (teamName: string): string => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-6">
+    <div className="min-h-screen bg-gradient-to-b from-black via-gray-950 to-black text-white p-4 sm:p-6">
       {loading && (
         <p className="text-gray-400">
           Carregando jogos...
@@ -237,127 +252,159 @@ const getLogo = (teamName: string): string => {
         </p>
       )}
 
-      <h1 className="text-3xl font-bold mb-6">
+     <div className="mb-8">
+      <h1 className="text-4xl font-bold">
         Próximos Jogos
       </h1>
+
+      <p className="text-gray-400 mt-2">
+        Acompanhe todas as partidas do Corinthians.
+      </p>
+    </div>
 
       {upcoming.length === 0 && !loading && (
         <p className="text-gray-400">
           Nenhum jogo futuro
         </p>
       )}
+<div className="grid gap-4">
+  {upcoming.map((match) => (
+    <div
+      key={match.id}
+      className="
+      bg-gradient-to-br
+      from-gray-900
+      to-gray-800
+      rounded-2xl
+      border
+      border-gray-700
+      shadow-xl
+      hover:border-white
+      transition-all
+      duration-300
+      p-6
+      "
+    >
+      {/* Competição */}
+      <p className="text-center text-sm text-gray-400 mb-4">
+        {match.competition}
+      </p>
 
-      <div className="grid gap-4">
-        {upcoming.map((match) => (
-          <div
-            key={match.id}
-            className="bg-gray-900 p-4 rounded flex items-center justify-between"
-          >
-            <div className="flex items-center gap-4">
-              <img
-                src={getLogo(match.home_team)}
-                onError={(e) => {
-                  (
-                    e.target as HTMLImageElement
-                  ).src =
-                    "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
-                }}
-                className="w-10 h-10 object-contain"
-              />
+      {/* Times */}
+       <div className="flex items-center justify-between gap-6 sm:gap-10">
+        {/* Time da casa */}
+        <div className="flex flex-col items-center flex-1">
+          <img
+            src={getLogo(match.home_team)}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src =
+                "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
+            }}
+            className=" w-20 h-20 sm:w-24 sm:h-24 object-contain"
+          />
 
-              <span className="capitalize">
-                {match.home_team}
-              </span>
-            </div>
+        <span className="mt-3 text-center text-base sm:text-lg font-bold capitalize">
+        {match.home_team}
+        </span>
+        </div>
 
-            <span className="text-gray-400 font-bold">
-              vs
-            </span>
+        {/* VS */}
+        <div className="flex flex-col items-center">
+          <span className="text-xl font-bold text-gray-400">
+            VS
+          </span>
+        </div>
 
-            <div className="flex items-center gap-4">
-              <span className="capitalize">
-                {match.away_team}
-              </span>
+        {/* Time visitante */}
+        <div className="flex flex-col items-center flex-1">
+          <img
+            src={getLogo(match.away_team)}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src =
+                "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
+            }}
+            className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
+          />
 
-              <img
-                src={getLogo(match.away_team)}
-                onError={(e) => {
-                  (
-                    e.target as HTMLImageElement
-                  ).src =
-                    "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
-                }}
-                className="w-10 h-10 object-contain"
-              />
-            </div>
-
-            <div className="text-right">
-              <p className="text-sm">
-                {formatDateBR(match.match_date)} -{" "}
-                {formatTime(match.match_date)}
-              </p>
-
-              <p className="text-xs text-gray-400">
-                {match.competition}
-              </p>
-            </div>
-          </div>
-        ))}
+          <span className="mt-3 text-center text-base sm:text-lg font-bold capitalize">
+             {match.away_team}
+        </span>
+        </div>
       </div>
 
-      <h2 className="text-2xl font-bold mt-10 mb-4">
-        Jogos Finalizados
-      </h2>
-
-      {finished.length === 0 && !loading && (
-        <p className="text-gray-500">
-          Nenhum jogo finalizado
-        </p>
-      )}
-
-      <div className="grid gap-3 opacity-70">
-        {finished.map((match) => (
-          <div
-            key={match.id}
-            className="bg-gray-800 p-3 rounded flex items-center justify-between"
-          >
-            <div className="flex items-center gap-3">
-              <img
-                src={getLogo(match.home_team)}
-                onError={(e) => {
-                  (
-                    e.target as HTMLImageElement
-                  ).src =
-                    "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
-                }}
-                className="w-6 h-6 object-contain"
-              />
-
-              <span className="capitalize">
-                {match.home_team} vs{" "}
-                {match.away_team}
-              </span>
-
-              <img
-                src={getLogo(match.away_team)}
-                onError={(e) => {
-                  (
-                    e.target as HTMLImageElement
-                  ).src =
-                    "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
-                }}
-                className="w-6 h-6 object-contain"
-              />
-            </div>
-
-            <span className="text-sm">
-              {formatDateBR(match.match_date)}
-            </span>
+            {/* Data */}
+      <div className="mt-5 border-t border-gray-800 pt-4">
+        <div className="flex justify-center gap-6 flex-wrap">
+          <div className="flex items-center gap-2 text-white">
+            <Calendar size={18} />
+            <span>{formatDateBR(match.match_date)}</span>
           </div>
-        ))}
+
+          <div className="flex items-center gap-2 text-white">
+            <Clock3 size={18} />
+            <span>{formatTime(match.match_date)}</span>
+          </div>
+        </div>
+
+        <p className="text-green-400 text-sm mt-3 text-center font-semibold">
+          {daysLeft(match.match_date)}
+        </p>
       </div>
     </div>
-  );
-}
+  ))}
+</div>
+
+<h2 className="text-2xl font-bold mt-10 mb-4">
+  Jogos Finalizados
+</h2>
+
+{finished.length === 0 && !loading && (
+  <p className="text-gray-500">
+    Nenhum jogo finalizado
+  </p>
+)}
+
+<div className="grid gap-3 opacity-70">
+  {finished.map((match) => (
+    <div
+      key={match.id}
+      className="bg-gray-800 p-3 rounded flex items-center justify-between"
+    >
+      <div className="flex items-center gap-3">
+        <img
+          src={getLogo(match.home_team)}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src =
+              "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
+          }}
+          className="w-6 h-6 object-contain"
+        />
+
+        <span className="capitalize">
+          {match.home_team} vs {match.away_team}
+        </span>
+
+        <img
+          src={getLogo(match.away_team)}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src =
+              "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
+          }}
+          className="w-6 h-6 object-contain"
+        />
+      </div>
+
+      <span className="text-sm">
+        {formatDateBR(match.match_date)}
+      </span>
+    </div>
+  ))}
+</div>
+
+</div>
+
+  )
+};
+
 
 export default Matches;

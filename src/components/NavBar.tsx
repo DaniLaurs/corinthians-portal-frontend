@@ -35,15 +35,17 @@ function Navbar() {
       <div className="flex items-center justify-between">
 
         {/* LOGO */}
-        <Link to="/" className="flex items-center gap-2">
-          <img
-            src="https://logodetimes.com/times/corinthians/logo-corinthians-256.png"
-            className="w-8 h-8 sm:w-9 sm:h-9"
-          />
-          <h1 className="text-sm sm:text-xl font-bold">
-            Corinthians Portal
-          </h1>
-        </Link>
+        <div className="flex items-center gap-3">
+        <img
+          src="https://logodetimes.com/times/corinthians/logo-corinthians-256.png"
+          alt="Corinthians"
+          className="w-10 h-10 object-contain"
+        />
+
+        <h1 className="text-xl sm:text-2xl font-bold">
+          Corinthians-Portal
+        </h1>
+      </div>
 
         {/* BOTÃO MOBILE */}
         <button

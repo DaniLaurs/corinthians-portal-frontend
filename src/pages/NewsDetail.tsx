@@ -30,8 +30,8 @@ function NewsDetail() {
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
 
-  const API = "https://corinthians-portal-backend.onrender.com/api/news";
-  const COMMENT_API = "https://corinthians-portal-backend.onrender.com/api/comments";
+  const API = "https://localhost:3000/api/news";
+  const COMMENT_API = "https://localhost:3000/api/comments";
 
   // 📰 carregar notícia
   const loadNews = async () => {
@@ -81,10 +81,12 @@ function NewsDetail() {
   };
 
   useEffect(() => {
+  
     loadNews();
     loadComments();
     loadLikes();
     checkLike();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // 💬 comentar
