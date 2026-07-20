@@ -31,7 +31,8 @@ function AdminClassificacao() {
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const API =
-   "http://localhost:3000/api/standings";
+   "https://corinthians-portal-backend.onrender.com/api/standings";
+
 
   // 🔥 PRIMEIRO DECLARA A FUNÇÃO
   const loadStandings = async () => {
