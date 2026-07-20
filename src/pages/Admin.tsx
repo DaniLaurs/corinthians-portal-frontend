@@ -15,8 +15,8 @@ interface Match {
   competition: string;
 }
 
-const API = "http://localhost:3000/api/news";
-const MATCH_API = "http://localhost:3000/api/matches";
+const API = "https://corinthians-portal-backend.onrender.com/api/news";
+const MATCH_API = "https://corinthians-portal-backend.onrender.com/api/matches";
 
 function Admin() {
   const [news, setNews] = useState<News[]>([]);

@@ -30,8 +30,8 @@ function NewsDetail() {
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
 
-  const API = "https://localhost:3000/api/news";
-  const COMMENT_API = "https://localhost:3000/api/comments";
+  const API = "https://corinthians-portal-backend.onrender.com/api/news";
+  const COMMENT_API = "https://corinthians-portal-backend.onrender.com/api/comments";
 
   // 📰 carregar notícia
   const loadNews = async () => {

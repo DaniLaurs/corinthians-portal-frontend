@@ -20,6 +20,7 @@ function Home() {
         const data = await res.json();
 
         setNews(data.data || []);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         console.log("Erro ao carregar notícias");
       }

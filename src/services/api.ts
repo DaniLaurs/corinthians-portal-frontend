@@ -1,5 +1,5 @@
 
-export const API_URL = "http://localhost:3000/api";
+export _URL = "https://corinthians-portal-backend.onrender.com/api";
 
 export async function apiFetch(
   endpoint: string,
