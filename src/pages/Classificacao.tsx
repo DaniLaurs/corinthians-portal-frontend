@@ -102,7 +102,7 @@ function Classificacao() {
   const [table, setTable] = useState<Team[]>([]);
 
   const API =
-"http://localhost:3000/api/standings";
+"https://corinthians-portal-backend.onrender.com/api/standings";
 
   // 🔥 VARIAÇÃO POSIÇÃO
   const getVariation = (team: Team, index: number) => {
