@@ -122,8 +122,8 @@ const TEAM_LOGOS: Record<string, string> = {
 };
 
 // 🔥 NORMALIZA nomes
-const normalize = (text: string) =>
-  text
+const normalize = (text?: string) =>
+  (text || "")
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -131,14 +131,17 @@ const normalize = (text: string) =>
 
 function Matches() {
   const [matches, setMatches] = useState<Match[]>([]);
+  console.log("MATCHES:", matches);
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
 
   const API =
-    "http://localhost:3000/api/matches";
+    "https://corinthians-portal-backend.onrender.com/api/matches";
+
 
   const TEAM_API =
-    "http://localhost:3000/api/teams";
+    "https://corinthians-portal-backend.onrender.com/api/matches";
+
 
     const daysLeft = (date: string) => {
   const diff =
@@ -168,6 +171,9 @@ function Matches() {
       const matchesData = await matchesRes.json();
       const teamsData = await teamsRes.json();
 
+      console.log("JOGOS RECEBIDOS:", matchesData);
+console.log("TIMES RECEBIDOS:", teamsData);
+
       setMatches(
         Array.isArray(matchesData)
           ? matchesData
@@ -185,24 +191,25 @@ function Matches() {
       setLoading(false);
     }
   };
-const getLogo = (teamName: string): string => {
+
+const getLogo = (teamName?: string): string => {
+
+  if (!teamName) {
+    return "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
+  }
+
   const key = normalize(teamName);
 
   console.log("🔎 procurando:", key);
 
-  // 🔥 tenta pegar do TEAM_LOGOS primeiro
   if (TEAM_LOGOS[key]) {
     return TEAM_LOGOS[key];
   }
 
-  // 🔥 depois tenta banco
   const team = teams.find(
     (t) => normalize(t.name) === key
   );
 
-  console.log("📦 encontrado:", team);
-
-  // 🔥 só usa se for URL válida
   if (
     team?.logo_url &&
     team.logo_url.startsWith("http")
@@ -210,18 +217,20 @@ const getLogo = (teamName: string): string => {
     return team.logo_url;
   }
 
-  // 🔥 fallback
   return "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
 };
   // 🔥 próximos jogos
-  const upcoming = matches.filter((m) => {
-    return m.match_date > new Date().toISOString();
-  });
+      const upcoming = matches.filter((m) => {
+        return new Date(m.match_date).getTime() > Date.now();
+      });
 
-  // 🔥 jogos finalizados
-  const finished = matches.filter((m) => {
-    return m.match_date <= new Date().toISOString();
-  });
+      const finished = matches.filter((m) => {
+        return new Date(m.match_date).getTime() <= Date.now();
+      });
+
+      console.log("TOTAL:", matches.length);
+console.log("FUTUROS:", upcoming.length);
+console.log("FINALIZADOS:", finished.length);
 
   const formatDateBR = (iso: string) => {
     const date = new Date(iso);

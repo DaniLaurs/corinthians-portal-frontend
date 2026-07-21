@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 export function Header() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [user, setUser] = useState<any>(null);
 
   const getUserFromToken = () => {
@@ -16,6 +17,7 @@ export function Header() {
 
   useEffect(() => {
     const userData = getUserFromToken();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setUser(userData);
   }, []);
 

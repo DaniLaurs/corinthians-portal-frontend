@@ -1,6 +1,7 @@
 
-export _URL = "https://corinthians-portal-backend.onrender.com/api";
-
+export const API_URL =
+  "https://corinthians-portal-backend.onrender.com/api";
+  
 export async function apiFetch(
   endpoint: string,
   options: RequestInit = {}

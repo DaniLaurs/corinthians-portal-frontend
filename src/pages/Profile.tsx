@@ -17,7 +17,9 @@ export default function Profile() {
 
   const user = getUser();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [comments, setComments] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [likes, setLikes] = useState<any[]>([]);
 
   useEffect(() => {
@@ -25,6 +27,7 @@ export default function Profile() {
 
     // 💬 comentários
     apiFetch(`/api/comments/user/${user.id}`)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 .then((data: any[]) => {       
    if (Array.isArray(data)) {
           setComments(data);
@@ -36,6 +39,7 @@ export default function Profile() {
 
     // ❤️ curtidas
     apiFetch(`/api/likes/user/${user.id}`)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((data: any[]) => {
         if (Array.isArray(data)) {
           setLikes(data);
@@ -74,6 +78,7 @@ export default function Profile() {
         {comments.length === 0 ? (
           <p className="text-gray-400">Nenhum comentário</p>
         ) : (
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           comments.map((c: any) => (
             <div key={c.id} className="bg-gray-800 p-3 mt-2 rounded break-words">
               <p>{c.content}</p>
@@ -91,6 +96,7 @@ export default function Profile() {
         {likes.length === 0 ? (
           <p className="text-gray-400">Nenhuma curtida</p>
         ) : (
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           likes.map((l: any) => (
             <div key={l.id} className="bg-gray-800 p-3 mt-2 rounded">
               <p>{l.title || "Sem título"}</p>
